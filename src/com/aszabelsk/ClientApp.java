@@ -1,7 +1,10 @@
 package com.aszabelsk;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.stage.Stage;
@@ -14,11 +17,10 @@ public class ClientApp extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        try {
-            client = new Client();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        initLoginDialog();
+    }
+
+    private void initLoginDialog() {
         Dialog<ButtonType> loginDialog = new Dialog<>();
         FXMLLoader fxmlLoader = new FXMLLoader();
         loadFxml(loginDialog, fxmlLoader);
@@ -26,6 +28,12 @@ public class ClientApp extends Application {
         initButtons(loginDialog, controller);
         loginDialog.setTitle("My Messaging App");
         showLoginDialog(loginDialog, controller);
+    }
+
+    private void showConnectionErrorAlert() {
+        Alert connectionErrorAlert = new Alert(Alert.AlertType.INFORMATION);
+        connectionErrorAlert.setHeaderText("Cannot connect to server");
+        connectionErrorAlert.showAndWait();
     }
 
     private void showLoginDialog(Dialog<ButtonType> loginDialog, LoginDialogController controller) {
@@ -42,6 +50,18 @@ public class ClientApp extends Application {
     private void initButtons(Dialog<ButtonType> dialog, LoginDialogController controller) {
         dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
         dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
+
+        final Button okButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
+        okButton.setDisable(true);
+        okButton.addEventFilter(ActionEvent.ACTION, event -> {
+            try {
+                client = new Client();
+            } catch (IOException e) {
+                event.consume();
+                showConnectionErrorAlert();
+            }
+        });
+
         controller.getUsernameTextField().textProperty().addListener((observable, oldValue, newValue) -> {
             dialog.getDialogPane().lookupButton(ButtonType.OK).setDisable(newValue.isEmpty());
         });
