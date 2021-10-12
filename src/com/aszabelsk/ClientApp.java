@@ -10,21 +10,29 @@ import java.io.IOException;
 
 public class ClientApp extends Application {
 
+    private Client client;
+
     @Override
     public void start(Stage primaryStage) {
-        Dialog<ButtonType> dialog = new Dialog<>();
+        try {
+            client = new Client();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Dialog<ButtonType> loginDialog = new Dialog<>();
         FXMLLoader fxmlLoader = new FXMLLoader();
-        loadFxml(dialog, fxmlLoader);
+        loadFxml(loginDialog, fxmlLoader);
         LoginDialogController controller = fxmlLoader.getController();
-        initButtons(dialog, controller);
+        initButtons(loginDialog, controller);
+        loginDialog.setTitle("My Messaging App");
+        showLoginDialog(loginDialog, controller);
+    }
 
-        dialog.setTitle("My Messaging App");
-
-        dialog.showAndWait().ifPresent(response -> {
+    private void showLoginDialog(Dialog<ButtonType> loginDialog, LoginDialogController controller) {
+        loginDialog.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
-                System.out.println("Hello, " + controller.getUsernameTextField().getText());
-                Client client = new Client();
-                client.start();
+                String username = controller.getUsernameTextField().getText();
+                client.start(username);
             } else {
                 System.exit(0);
             }

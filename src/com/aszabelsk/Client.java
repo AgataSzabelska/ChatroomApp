@@ -8,28 +8,31 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class Client {
+    private String username;
+
     private Socket socket;
     private BufferedReader reader;
     private PrintWriter writer;
 
-    public Client() {
-        try {
-            socket = new Socket("127.0.0.1", 2000);
-            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            writer = new PrintWriter(socket.getOutputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public Client() throws IOException {
+        socket = new Socket("127.0.0.1", 2000);
+        reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        writer = new PrintWriter(socket.getOutputStream());
     }
 
-    public void start() {
+    public void start(String username) {
+        this.username = username;
+        initReceiverThread();
+    }
+
+    public void initReceiverThread() {
         Thread receiverThread = new Thread(new MessageReceiver());
         receiverThread.start();
         String message = null;
         Scanner scanner = new Scanner(System.in);
         while (!"quit".equals(message)) {
             message = scanner.nextLine();
-            writer.println(message);
+            writer.println(username + ": " + message);
             writer.flush();
         }
         scanner.close();
