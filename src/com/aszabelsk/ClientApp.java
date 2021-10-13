@@ -17,13 +17,9 @@ public class ClientApp extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        initLoginDialog();
-    }
-
-    private void initLoginDialog() {
         Dialog<ButtonType> loginDialog = new Dialog<>();
         FXMLLoader fxmlLoader = new FXMLLoader();
-        loadFxml(loginDialog, fxmlLoader);
+        loadLoginDialogFxml(loginDialog, fxmlLoader);
         LoginDialogController controller = fxmlLoader.getController();
         initButtons(loginDialog, controller);
         loginDialog.setTitle("My Messaging App");
@@ -47,8 +43,7 @@ public class ClientApp extends Application {
     }
 
     private void startChat(LoginDialogController controller) {
-        String username = controller.getUsernameTextField().getText();
-        client.start(username);
+        client.start(controller.getUsernameTextField().getText());
         ChatWindowController chatWindowController = new ChatWindowController(client);
     }
 
@@ -56,8 +51,13 @@ public class ClientApp extends Application {
         dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
         dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
 
-        final Button okButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
+        Button okButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
+
         okButton.setDisable(true);
+        controller.getUsernameTextField().textProperty().addListener((observable, oldValue, newValue) -> {
+            dialog.getDialogPane().lookupButton(ButtonType.OK).setDisable(newValue.isEmpty());
+        });
+
         okButton.addEventFilter(ActionEvent.ACTION, event -> {
             try {
                 client = new Client();
@@ -66,13 +66,9 @@ public class ClientApp extends Application {
                 showConnectionErrorAlert();
             }
         });
-
-        controller.getUsernameTextField().textProperty().addListener((observable, oldValue, newValue) -> {
-            dialog.getDialogPane().lookupButton(ButtonType.OK).setDisable(newValue.isEmpty());
-        });
     }
 
-    private void loadFxml(Dialog<ButtonType> dialog, FXMLLoader fxmlLoader) {
+    private void loadLoginDialogFxml(Dialog<ButtonType> dialog, FXMLLoader fxmlLoader) {
         fxmlLoader.setLocation(getClass().getResource("loginDialog.fxml"));
         try {
             dialog.getDialogPane().setContent(fxmlLoader.load());

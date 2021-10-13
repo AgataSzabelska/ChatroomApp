@@ -9,13 +9,17 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class ChatWindowController {
-    private Client client;
+    private final Client client;
 
     private HBox root;
 
     public ChatWindowController(Client client) {
         this.client = client;
         loadFxml();
+        initStage();
+    }
+
+    private void initStage() {
         Stage stage = new Stage();
         stage.setTitle("Messaging App");
         stage.setScene(new Scene(root));

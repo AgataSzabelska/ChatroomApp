@@ -23,8 +23,7 @@ public class Server {
     }
 
     public void start() {
-//        while (!outputStreams.isEmpty()) {
-        while (true) { //TODO stop condition
+        while (true) {
             try {
                 Socket clientSocket = serverSocket.accept();
                 PrintWriter writer = new PrintWriter(clientSocket.getOutputStream());
