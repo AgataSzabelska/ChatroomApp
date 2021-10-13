@@ -23,19 +23,31 @@ public class Client {
     public void start(String username) {
         this.username = username;
         initReceiverThread();
+        initSenderThread();
+    }
+
+    private void initSenderThread() {
+        Thread senderThread = new Thread(new MessageSender());
+        senderThread.start();
+    }
+
+    public class MessageSender implements Runnable {
+        @Override
+        public void run() {
+            String message = null;
+            Scanner scanner = new Scanner(System.in);
+            while (!"quit".equals(message)) {
+                message = scanner.nextLine();
+                writer.println(username + ": " + message);
+                writer.flush();
+            }
+            scanner.close();
+        }
     }
 
     public void initReceiverThread() {
         Thread receiverThread = new Thread(new MessageReceiver());
         receiverThread.start();
-        String message = null;
-        Scanner scanner = new Scanner(System.in);
-        while (!"quit".equals(message)) {
-            message = scanner.nextLine();
-            writer.println(username + ": " + message);
-            writer.flush();
-        }
-        scanner.close();
     }
 
     public class MessageReceiver implements Runnable {

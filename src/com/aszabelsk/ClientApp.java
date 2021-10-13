@@ -39,12 +39,17 @@ public class ClientApp extends Application {
     private void showLoginDialog(Dialog<ButtonType> loginDialog, LoginDialogController controller) {
         loginDialog.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
-                String username = controller.getUsernameTextField().getText();
-                client.start(username);
+                startChat(controller);
             } else {
                 System.exit(0);
             }
         });
+    }
+
+    private void startChat(LoginDialogController controller) {
+        String username = controller.getUsernameTextField().getText();
+        client.start(username);
+        ChatWindowController chatWindowController = new ChatWindowController(client);
     }
 
     private void initButtons(Dialog<ButtonType> dialog, LoginDialogController controller) {
@@ -73,7 +78,6 @@ public class ClientApp extends Application {
             dialog.getDialogPane().setContent(fxmlLoader.load());
         } catch (IOException e) {
             e.printStackTrace();
-            System.exit(-1);
         }
     }
 
