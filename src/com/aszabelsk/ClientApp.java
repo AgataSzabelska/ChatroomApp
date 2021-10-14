@@ -14,9 +14,11 @@ import java.io.IOException;
 public class ClientApp extends Application {
 
     private Client client;
+    private Stage primaryStage;
 
     @Override
     public void start(Stage primaryStage) {
+        this.primaryStage = primaryStage;
         Dialog<ButtonType> loginDialog = new Dialog<>();
         FXMLLoader fxmlLoader = new FXMLLoader();
         loadLoginDialogFxml(loginDialog, fxmlLoader);
@@ -44,7 +46,8 @@ public class ClientApp extends Application {
 
     private void startChat(LoginDialogController controller) {
         client.start(controller.getUsernameTextField().getText());
-        ChatWindowController chatWindowController = new ChatWindowController(client);
+        ChatWindowController chatWindowController = new ChatWindowController(primaryStage, client);
+//        chatWindowController.getStage()
     }
 
     private void initButtons(Dialog<ButtonType> dialog, LoginDialogController controller) {

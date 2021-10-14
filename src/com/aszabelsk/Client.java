@@ -1,5 +1,8 @@
 package com.aszabelsk;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,9 +13,14 @@ import java.util.Scanner;
 public class Client {
     private String username;
 
-    private Socket socket;
-    private BufferedReader reader;
-    private PrintWriter writer;
+    private final Socket socket;
+    private final BufferedReader reader;
+    private final PrintWriter writer;
+
+    private Thread receiverThread;
+    private Thread senderThread;
+
+    private BooleanProperty running = new SimpleBooleanProperty(true);
 
     public Client() throws IOException {
         socket = new Socket("127.0.0.1", 2000);
@@ -27,7 +35,7 @@ public class Client {
     }
 
     private void initSenderThread() {
-        Thread senderThread = new Thread(new MessageSender());
+        senderThread = new Thread(new MessageSender());
         senderThread.start();
     }
 
@@ -36,17 +44,18 @@ public class Client {
         public void run() {
             String message = null;
             Scanner scanner = new Scanner(System.in);
-            while (!"quit".equals(message)) {
+            while (running.get() && !"quit".equals(message)) {
                 message = scanner.nextLine();
                 writer.println(username + ": " + message);
                 writer.flush();
             }
             scanner.close();
+            writer.close();
         }
     }
 
     public void initReceiverThread() {
-        Thread receiverThread = new Thread(new MessageReceiver());
+        receiverThread = new Thread(new MessageReceiver());
         receiverThread.start();
     }
 
@@ -55,12 +64,31 @@ public class Client {
         public void run() {
             String message;
             try {
-                while ((message = reader.readLine()) != null) {
+                while (running.get() && (message = reader.readLine()) != null) {
                     System.out.println(message);
                 }
+                reader.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void disconnect() {
+        running.set(false);
+        // TODO fix threads
+        receiverThread.interrupt();
+        senderThread.interrupt();
+//        try {
+//            receiverThread.join();
+//            senderThread.join();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        try {
+//            socket.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 }

@@ -11,18 +11,26 @@ import java.io.IOException;
 public class ChatWindowController {
     private final Client client;
 
+    private Stage owner;
+    private Stage stage;
     private HBox root;
 
-    public ChatWindowController(Client client) {
+    public ChatWindowController(Stage owner, Client client) {
+        this.owner = owner;
         this.client = client;
         loadFxml();
         initStage();
     }
 
     private void initStage() {
-        Stage stage = new Stage();
+        stage = owner;//new Stage();
         stage.setTitle("Messaging App");
         stage.setScene(new Scene(root));
+        stage.setOnCloseRequest(event -> {
+//            owner.close();
+            client.disconnect();
+            System.out.println("");
+        });
         stage.show();
     }
 
@@ -35,6 +43,10 @@ public class ChatWindowController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public Stage getStage() {
+        return stage;
     }
 
     @FXML
