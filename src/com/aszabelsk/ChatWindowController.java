@@ -11,25 +11,21 @@ import java.io.IOException;
 public class ChatWindowController {
     private final Client client;
 
-    private Stage owner;
     private Stage stage;
     private HBox root;
 
-    public ChatWindowController(Stage owner, Client client) {
-        this.owner = owner;
+    public ChatWindowController(Stage stage, Client client) {
+        this.stage = stage;
         this.client = client;
         loadFxml();
         initStage();
     }
 
     private void initStage() {
-        stage = owner;//new Stage();
         stage.setTitle("Messaging App");
         stage.setScene(new Scene(root));
         stage.setOnCloseRequest(event -> {
-//            owner.close();
             client.disconnect();
-            System.out.println("");
         });
         stage.show();
     }

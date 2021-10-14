@@ -77,8 +77,6 @@ public class Client {
     public void disconnect() {
         running.set(false);
         // TODO fix threads
-        receiverThread.interrupt();
-        senderThread.interrupt();
 //        try {
 //            receiverThread.join();
 //            senderThread.join();
