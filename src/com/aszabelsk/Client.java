@@ -34,7 +34,7 @@ public class Client {
     }
 
     public void sendMessage(String message) {
-        senderThread = new Thread(new MessageSender(message));
+        senderThread = new Thread(new MessageSender(writer, message, username));
         senderThread.start();
     }
 
@@ -42,38 +42,9 @@ public class Client {
         this.username = username;
     }
 
-    public class MessageSender implements Runnable {
-        private final String message;
-
-        public MessageSender(String message) {
-            this.message = message;
-        }
-
-        @Override
-        public void run() {
-            writer.println(username + ": " + message);
-            writer.flush();
-        }
-    }
-
     public void initReceiverThread() {
-        receiverThread = new Thread(new MessageReceiver());
+        receiverThread = new Thread(new MessageReceiver(reader));
         receiverThread.start();
-    }
-
-    public class MessageReceiver implements Runnable {
-        @Override
-        public void run() {
-            String message;
-            try {
-                while (running.get() && (message = reader.readLine()) != null) {
-                    System.out.println(message);
-                }
-                reader.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     public void disconnect() {
