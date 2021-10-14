@@ -16,17 +16,19 @@ public class Server {
 
     public Server() {
         try {
-            this.serverSocket = new ServerSocket(2000);
+            serverSocket = new ServerSocket(2000);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void start() {
+        System.out.println("Server started at " + serverSocket.getInetAddress() + ":" + serverSocket.getLocalPort());
         while (true) {
             try {
                 Socket clientSocket = serverSocket.accept();
                 PrintWriter writer = new PrintWriter(clientSocket.getOutputStream());
+                System.out.println("Client added: " + clientSocket.getInetAddress() + ":" + clientSocket.getLocalPort());
                 outputStreams.add(writer);
                 Thread thread = new Thread(new ClientNotification(clientSocket));
                 thread.start();
@@ -56,7 +58,7 @@ public class Server {
             try {
                 while ((message = reader.readLine()) != null) {
                     forwardToAll(message);
-                    if (message.equals("quit")) {
+                    if (message.equals("quit")) { //TODO change condition
                         //TODO remove client
                     }
                 }
