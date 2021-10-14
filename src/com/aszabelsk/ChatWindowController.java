@@ -5,10 +5,10 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -17,10 +17,10 @@ public class ChatWindowController {
     private final Client client;
 
     private Stage stage;
-    private HBox root;
+    private VBox root;
 
     @FXML
-    private Button sendButton;
+    private StackPane sendButton;
 
     @FXML
     private TextField messageField;
@@ -41,9 +41,12 @@ public class ChatWindowController {
     }
 
     private void registerListeners(Client client) {
-        sendButton.setOnAction(event -> {
-            client.sendMessage(messageField.getText());
-            messageField.clear();
+        sendButton.setOnMouseClicked(event -> {
+            String message = messageField.getText();
+            if (!message.isEmpty()) {
+                client.sendMessage(message);
+                messageField.clear();
+            }
         });
     }
 
