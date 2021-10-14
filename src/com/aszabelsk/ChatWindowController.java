@@ -41,10 +41,6 @@ public class ChatWindowController {
         }
     }
 
-    public Stage getStage() {
-        return stage;
-    }
-
     @FXML
     public void initialize() {
 
