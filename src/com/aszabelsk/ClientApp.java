@@ -45,9 +45,8 @@ public class ClientApp extends Application {
     }
 
     private void startChat(LoginDialogController controller) {
-        client.start(controller.getUsernameTextField().getText());
+        client.logIn(controller.getUsernameTextField().getText());
         ChatWindowController chatWindowController = new ChatWindowController(primaryStage, client);
-//        chatWindowController.getStage()
     }
 
     private void initButtons(Dialog<ButtonType> dialog, LoginDialogController controller) {

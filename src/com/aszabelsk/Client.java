@@ -2,13 +2,13 @@ package com.aszabelsk;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.ObservableList;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class Client {
     private String username;
@@ -28,29 +28,31 @@ public class Client {
         writer = new PrintWriter(socket.getOutputStream());
     }
 
-    public void start(String username) {
-        this.username = username;
+    public void start(ObservableList<String> messages) {
+//        initReceiverThread(messages);
         initReceiverThread();
-        initSenderThread();
     }
 
-    private void initSenderThread() {
-        senderThread = new Thread(new MessageSender());
+    public void sendMessage(String message) {
+        senderThread = new Thread(new MessageSender(message));
         senderThread.start();
     }
 
+    public void logIn(String username) {
+        this.username = username;
+    }
+
     public class MessageSender implements Runnable {
+        private final String message;
+
+        public MessageSender(String message) {
+            this.message = message;
+        }
+
         @Override
         public void run() {
-            String message = null;
-            Scanner scanner = new Scanner(System.in);
-            while (running.get() && !"quit".equals(message)) {
-                message = scanner.nextLine();
-                writer.println(username + ": " + message);
-                writer.flush();
-            }
-            scanner.close();
-            writer.close();
+            writer.println(username + ": " + message);
+            writer.flush();
         }
     }
 
