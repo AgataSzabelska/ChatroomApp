@@ -1,4 +1,4 @@
-package com.aszabelsk;
+package com.aszabelsk.client;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -56,7 +56,7 @@ public class ChatWindowController {
     }
 
     private void initStage() {
-        stage.setTitle("Messaging App");
+        stage.setTitle("Chatroom App");
         stage.setScene(new Scene(root));
         stage.setOnCloseRequest(event -> {
             client.disconnect();

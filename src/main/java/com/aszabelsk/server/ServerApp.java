@@ -1,4 +1,4 @@
-package com.aszabelsk;
+package com.aszabelsk.server;
 
 public class ServerApp {
 

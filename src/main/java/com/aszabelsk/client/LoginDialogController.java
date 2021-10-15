@@ -1,4 +1,4 @@
-package com.aszabelsk;
+package com.aszabelsk.client;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;

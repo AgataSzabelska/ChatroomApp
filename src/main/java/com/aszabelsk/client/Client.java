@@ -1,4 +1,4 @@
-package com.aszabelsk;
+package com.aszabelsk.client;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;

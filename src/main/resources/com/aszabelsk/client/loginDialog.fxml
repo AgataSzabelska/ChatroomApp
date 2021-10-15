@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.VBox?>
 <VBox prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.aszabelsk.LoginDialogController">
+      fx:controller="com.aszabelsk.client.LoginDialogController">
     <children>
         <Label text="Enter your username:"/>
         <TextField fx:id="usernameTextField"/>

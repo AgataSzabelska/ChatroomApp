@@ -1,4 +1,4 @@
-package com.aszabelsk;
+package com.aszabelsk.client;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -24,7 +24,7 @@ public class ClientApp extends Application {
         loadLoginDialogFxml(loginDialog, fxmlLoader);
         LoginDialogController controller = fxmlLoader.getController();
         initButtons(loginDialog, controller);
-        loginDialog.setTitle("My Messaging App");
+        loginDialog.setTitle("My Chatroom App");
         showLoginDialog(loginDialog, controller);
     }
 

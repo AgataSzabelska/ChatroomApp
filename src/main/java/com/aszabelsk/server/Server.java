@@ -1,4 +1,4 @@
-package com.aszabelsk;
+package com.aszabelsk.server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
