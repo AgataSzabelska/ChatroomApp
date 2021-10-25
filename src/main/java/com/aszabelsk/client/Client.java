@@ -17,7 +17,8 @@ public class Client {
     private final BufferedReader reader;
     private final PrintWriter writer;
 
-    private Thread receiverThread;
+    private MessageReceiverService receiverService;
+//    private Service<List<String>> receiverService;
     private Thread senderThread;
 
     private BooleanProperty running = new SimpleBooleanProperty(true);
@@ -43,8 +44,13 @@ public class Client {
     }
 
     public void initReceiverThread() {
-        receiverThread = new Thread(new MessageReceiver(reader));
-        receiverThread.start();
+        receiverService = new MessageReceiverService(reader);
+//        Platform.runLater(()->{
+        receiverService.start();
+        receiverService.lastMessageProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println(newValue + "\n");
+        });
+//        });
     }
 
     public void disconnect() {
