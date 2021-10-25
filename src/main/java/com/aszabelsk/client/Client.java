@@ -2,7 +2,7 @@ package com.aszabelsk.client;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.collections.ObservableList;
+import javafx.beans.property.StringProperty;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,7 +18,6 @@ public class Client {
     private final PrintWriter writer;
 
     private MessageReceiverService receiverService;
-//    private Service<List<String>> receiverService;
     private Thread senderThread;
 
     private BooleanProperty running = new SimpleBooleanProperty(true);
@@ -27,11 +26,11 @@ public class Client {
         socket = new Socket("127.0.0.1", 2000);
         reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         writer = new PrintWriter(socket.getOutputStream());
+        receiverService = new MessageReceiverService(reader);
     }
 
-    public void start(ObservableList<String> messages) {
-//        initReceiverThread(messages);
-        initReceiverThread();
+    public void start() {
+        receiverService.start();
     }
 
     public void sendMessage(String message) {
@@ -43,14 +42,8 @@ public class Client {
         this.username = username;
     }
 
-    public void initReceiverThread() {
-        receiverService = new MessageReceiverService(reader);
-//        Platform.runLater(()->{
-        receiverService.start();
-        receiverService.lastMessageProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println(newValue + "\n");
-        });
-//        });
+    public StringProperty lastMessageProperty() {
+        return receiverService.lastMessageProperty();
     }
 
     public void disconnect() {

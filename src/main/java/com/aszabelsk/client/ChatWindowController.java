@@ -1,5 +1,6 @@
 package com.aszabelsk.client;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -49,7 +50,7 @@ public class ChatWindowController {
         initMessageListView();
         addTooltips();
         registerListeners(client);
-        client.start(messages);
+        client.start();
     }
 
     private void addTooltips() {
@@ -66,6 +67,12 @@ public class ChatWindowController {
                 client.sendMessage(message);
                 messageField.clear();
             }
+        });
+
+        client.lastMessageProperty().addListener((observable, oldValue, newValue) -> {
+            Platform.runLater(() -> {
+                messages.add(newValue);
+            });
         });
     }
 
