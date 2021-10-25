@@ -48,11 +48,6 @@ public class ChatWindowController {
         initView();
     }
 
-    public void start() {
-        registerListeners(client);
-        client.start();
-    }
-
     private void initView() {
         loadFxml();
         initStage();
@@ -88,6 +83,11 @@ public class ChatWindowController {
         Tooltip.install(addChatroomButton, new Tooltip("Add new chatroom"));
         Tooltip.install(emojiButton, new Tooltip("Add emoji"));
         Tooltip.install(sendButton, new Tooltip("Send message"));
+    }
+
+    public void start() {
+        registerListeners(client);
+        client.start();
     }
 
     private void registerListeners(Client client) {
