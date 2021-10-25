@@ -19,12 +19,16 @@ public class ClientApp extends Application {
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
+        promptLogin();
+    }
+
+    private void promptLogin() {
         Dialog<ButtonType> loginDialog = new Dialog<>();
+        loginDialog.setTitle("My Chatroom App");
         FXMLLoader fxmlLoader = new FXMLLoader();
         loadLoginDialogFxml(loginDialog, fxmlLoader);
         LoginDialogController controller = fxmlLoader.getController();
         initButtons(loginDialog, controller);
-        loginDialog.setTitle("My Chatroom App");
         showLoginDialog(loginDialog, controller);
     }
 
@@ -34,19 +38,13 @@ public class ClientApp extends Application {
         connectionErrorAlert.showAndWait();
     }
 
-    private void showLoginDialog(Dialog<ButtonType> loginDialog, LoginDialogController controller) {
-        loginDialog.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.OK) {
-                startChat(controller);
-            } else {
-                System.exit(0);
-            }
-        });
-    }
-
-    private void startChat(LoginDialogController controller) {
-        client.logIn(controller.getUsernameTextField().getText());
-        ChatWindowController chatWindowController = new ChatWindowController(primaryStage, client);
+    private void loadLoginDialogFxml(Dialog<ButtonType> dialog, FXMLLoader fxmlLoader) {
+        fxmlLoader.setLocation(getClass().getResource("loginDialog.fxml"));
+        try {
+            dialog.getDialogPane().setContent(fxmlLoader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initButtons(Dialog<ButtonType> dialog, LoginDialogController controller) {
@@ -70,13 +68,20 @@ public class ClientApp extends Application {
         });
     }
 
-    private void loadLoginDialogFxml(Dialog<ButtonType> dialog, FXMLLoader fxmlLoader) {
-        fxmlLoader.setLocation(getClass().getResource("loginDialog.fxml"));
-        try {
-            dialog.getDialogPane().setContent(fxmlLoader.load());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void showLoginDialog(Dialog<ButtonType> loginDialog, LoginDialogController controller) {
+        loginDialog.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                startChat(controller);
+            } else {
+                System.exit(0);
+            }
+        });
+    }
+
+    private void startChat(LoginDialogController controller) {
+        client.logIn(controller.getUsernameTextField().getText());
+        ChatWindowController chatWindowController = new ChatWindowController(primaryStage, client);
+        chatWindowController.start();
     }
 
     public static void main(String[] args) {

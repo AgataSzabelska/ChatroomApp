@@ -17,10 +17,10 @@ public class Client {
     private final BufferedReader reader;
     private final PrintWriter writer;
 
-    private MessageReceiverService receiverService;
+    private final MessageReceiverService receiverService;
     private Thread senderThread;
 
-    private BooleanProperty running = new SimpleBooleanProperty(true);
+    private final BooleanProperty running = new SimpleBooleanProperty(true);
 
     public Client() throws IOException {
         socket = new Socket("127.0.0.1", 2000);

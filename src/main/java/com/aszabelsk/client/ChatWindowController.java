@@ -19,7 +19,7 @@ public class ChatWindowController {
 
     private final Client client;
 
-    private Stage stage;
+    private final Stage stage;
     private VBox root;
 
     @FXML
@@ -45,12 +45,42 @@ public class ChatWindowController {
     public ChatWindowController(Stage stage, Client client) {
         this.stage = stage;
         this.client = client;
+        initView();
+    }
+
+    public void start() {
+        registerListeners(client);
+        client.start();
+    }
+
+    private void initView() {
         loadFxml();
         initStage();
         initMessageListView();
         addTooltips();
-        registerListeners(client);
-        client.start();
+    }
+
+    private void loadFxml() {
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setController(this);
+        fxmlLoader.setLocation(getClass().getResource("chatWindow.fxml"));
+        try {
+            root = fxmlLoader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void initStage() {
+        stage.setTitle("Chatroom App");
+        stage.setScene(new Scene(root));
+        stage.setOnCloseRequest(event -> client.disconnect());
+        stage.show();
+    }
+
+    private void initMessageListView() {
+        messageListView.setItems(messages);
+        // TODO cell factory
     }
 
     private void addTooltips() {
@@ -70,39 +100,11 @@ public class ChatWindowController {
         });
 
         client.lastMessageProperty().addListener((observable, oldValue, newValue) -> {
-            Platform.runLater(() -> {
-                messages.add(newValue);
-            });
+            Platform.runLater(() -> messages.add(newValue));
         });
-    }
-
-    private void initMessageListView() {
-        messageListView.setItems(messages);
-        // TODO cell factory
-    }
-
-    private void initStage() {
-        stage.setTitle("Chatroom App");
-        stage.setScene(new Scene(root));
-        stage.setOnCloseRequest(event -> {
-            client.disconnect();
-        });
-        stage.show();
-    }
-
-    private void loadFxml() {
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setController(this);
-        fxmlLoader.setLocation(getClass().getResource("chatWindow.fxml"));
-        try {
-            root = fxmlLoader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @FXML
     public void initialize() {
-
     }
 }
