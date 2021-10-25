@@ -1,13 +1,17 @@
 package com.aszabelsk.client;
 
-import java.io.PrintWriter;
+import com.aszabelsk.commons.Message;
+
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.time.LocalDate;
 
 public class MessageSender implements Runnable {
-    private final PrintWriter writer;
+    private final ObjectOutputStream writer;
     private final String username;
     private final String message;
 
-    public MessageSender(PrintWriter writer, String message, String username) {
+    public MessageSender(ObjectOutputStream writer, String message, String username) {
         this.writer = writer;
         this.username = username;
         this.message = message;
@@ -15,7 +19,11 @@ public class MessageSender implements Runnable {
 
     @Override
     public void run() {
-        writer.println(username + ": " + message);
-        writer.flush();
+        try {
+            writer.writeObject(new Message(username, message, LocalDate.now()));
+//            writer.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

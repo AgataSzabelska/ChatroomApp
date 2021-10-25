@@ -1,5 +1,6 @@
 package com.aszabelsk.client;
 
+import com.aszabelsk.commons.Message;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -38,9 +39,9 @@ public class ChatWindowController {
     private TextField messageField;
 
     @FXML
-    private ListView<String> messageListView; //TODO <Message>
+    private ListView<Message> messageListView;
 
-    private final ObservableList<String> messages = FXCollections.observableArrayList();
+    private final ObservableList<Message> messages = FXCollections.observableArrayList();
 
     public ChatWindowController(Stage stage, Client client) {
         this.stage = stage;

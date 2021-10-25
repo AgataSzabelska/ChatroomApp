@@ -1,9 +1,10 @@
 package com.aszabelsk.server;
 
-import java.io.BufferedReader;
+import com.aszabelsk.commons.Message;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.List;
 public class Server {
 
     private ServerSocket serverSocket;
-    private final List<PrintWriter> outputStreams = new ArrayList<>();
+    private final List<ObjectOutputStream> outputStreams = new ArrayList<>();
 
     public Server() {
         try {
@@ -27,7 +28,7 @@ public class Server {
         while (true) {
             try {
                 Socket clientSocket = serverSocket.accept();
-                PrintWriter writer = new PrintWriter(clientSocket.getOutputStream());
+                ObjectOutputStream writer = new ObjectOutputStream(clientSocket.getOutputStream());
                 System.out.println("Client added: " + clientSocket.getInetAddress() + ":" + clientSocket.getLocalPort());
                 outputStreams.add(writer);
                 Thread thread = new Thread(new MessageForwarder(clientSocket));
@@ -40,13 +41,13 @@ public class Server {
 
 
     public class MessageForwarder implements Runnable {
-        BufferedReader reader;
+        ObjectInputStream reader;
         Socket socket;
 
         public MessageForwarder(Socket socket) {
             this.socket = socket;
             try {
-                reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                reader = new ObjectInputStream(socket.getInputStream());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -54,23 +55,23 @@ public class Server {
 
         @Override
         public void run() {
-            String message;
+            Message message;
             try {
-                while ((message = reader.readLine()) != null) {
+                while ((message = (Message) reader.readObject()) != null) {
                     forwardToAll(message);
-                    if (message.equals("quit")) { //TODO change condition
-                        //TODO remove client
-                    }
+//                    if (message.equals("quit")) { //TODO change condition
+//                        //TODO remove client
+//                    }
                 }
-            } catch (IOException e) {
+            } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }
 
-        private void forwardToAll(String message) {
-            for (PrintWriter writer : outputStreams) {
-                writer.println(message);
-                writer.flush();
+        private void forwardToAll(Message message) throws IOException {
+            for (ObjectOutputStream writer : outputStreams) {
+                writer.writeObject(message);
+//                writer.flush();
             }
         }
     }
