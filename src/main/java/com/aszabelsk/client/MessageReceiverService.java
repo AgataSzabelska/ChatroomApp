@@ -7,9 +7,8 @@ import javafx.concurrent.Task;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.List;
 
-public class MessageReceiverService extends Service<List<String>> {
+public class MessageReceiverService extends Service<Void> {
     private final BufferedReader reader;
     private final StringProperty lastMessageProperty = new SimpleStringProperty();
 
@@ -17,9 +16,9 @@ public class MessageReceiverService extends Service<List<String>> {
         this.reader = reader;
     }
 
-    protected Task<List<String>> createTask() {
-        return new Task<List<String>>() {
-            protected List<String> call() {
+    protected Task<Void> createTask() {
+        return new Task<Void>() {
+            protected Void call() {
                 String message;
                 try {
                     while ((message = reader.readLine()) != null) {
@@ -29,7 +28,7 @@ public class MessageReceiverService extends Service<List<String>> {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                return getValue();
+                return null;
             }
         };
     }
