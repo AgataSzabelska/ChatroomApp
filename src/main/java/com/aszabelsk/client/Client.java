@@ -29,8 +29,7 @@ public class Client {
     }
 
     public void sendMessage(String message) {
-        Thread senderThread = new Thread(new MessageSender(writer, message, username));
-        senderThread.start();
+        (new Thread(new MessageSender(writer, message, username))).start();
     }
 
     public void logIn(String username) {
