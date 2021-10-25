@@ -2,18 +2,19 @@ package com.aszabelsk.server;
 
 import com.aszabelsk.commons.Message;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Server {
 
     private ServerSocket serverSocket;
-    private final List<ObjectOutputStream> outputStreams = new ArrayList<>();
+    private final Map<Socket, ObjectOutputStream> socketToObjectOutputStream = new HashMap<>();
 
     public Server() {
         try {
@@ -30,8 +31,8 @@ public class Server {
                 Socket clientSocket = serverSocket.accept();
                 ObjectOutputStream writer = new ObjectOutputStream(clientSocket.getOutputStream());
                 System.out.println("Client added: " + clientSocket.getInetAddress() + ":" + clientSocket.getLocalPort());
-                outputStreams.add(writer);
-                Thread thread = new Thread(new MessageForwarder(clientSocket));
+                socketToObjectOutputStream.put(clientSocket, writer);
+                Thread thread = new Thread(new ClientHandler(clientSocket));
                 thread.start();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -40,14 +41,14 @@ public class Server {
     }
 
 
-    public class MessageForwarder implements Runnable {
+    public class ClientHandler implements Runnable {
         ObjectInputStream reader;
-        Socket socket;
+        Socket clientSocket;
 
-        public MessageForwarder(Socket socket) {
-            this.socket = socket;
+        public ClientHandler(Socket clientSocket) {
+            this.clientSocket = clientSocket;
             try {
-                reader = new ObjectInputStream(socket.getInputStream());
+                reader = new ObjectInputStream(clientSocket.getInputStream());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -59,9 +60,15 @@ public class Server {
             try {
                 while ((message = (Message) reader.readObject()) != null) {
                     forwardToAll(message);
-//                    if (message.equals("quit")) { //TODO change condition
-//                        //TODO remove client
-//                    }
+                }
+            } catch (EOFException e) {
+                System.out.println("Client disconnected: " + clientSocket.getInetAddress() + ":" + clientSocket.getLocalPort());
+                try {
+                    reader.close();
+                    socketToObjectOutputStream.remove(clientSocket).close();
+                    clientSocket.close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
                 }
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
@@ -69,9 +76,8 @@ public class Server {
         }
 
         private void forwardToAll(Message message) throws IOException {
-            for (ObjectOutputStream writer : outputStreams) {
+            for (ObjectOutputStream writer : socketToObjectOutputStream.values()) {
                 writer.writeObject(message);
-//                writer.flush();
             }
         }
     }

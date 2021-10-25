@@ -21,7 +21,6 @@ public class MessageSender implements Runnable {
     public void run() {
         try {
             writer.writeObject(new Message(username, message, LocalDate.now()));
-//            writer.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
