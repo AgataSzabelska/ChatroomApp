@@ -1,7 +1,5 @@
 package com.aszabelsk.client;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.StringProperty;
 
 import java.io.BufferedReader;
@@ -19,8 +17,6 @@ public class Client {
 
     private final MessageReceiverService receiverService;
     private Thread senderThread;
-
-    private final BooleanProperty running = new SimpleBooleanProperty(true);
 
     public Client() throws IOException {
         socket = new Socket("127.0.0.1", 2000);
@@ -47,18 +43,12 @@ public class Client {
     }
 
     public void disconnect() {
-        running.set(false);
-        // TODO fix threads
-//        try {
-//            receiverThread.join();
-//            senderThread.join();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        try {
-//            socket.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        receiverService.close();
+        writer.close();
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

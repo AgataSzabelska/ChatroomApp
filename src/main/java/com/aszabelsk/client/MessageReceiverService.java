@@ -33,6 +33,15 @@ public class MessageReceiverService extends Service<Void> {
         };
     }
 
+    public void close() {
+        cancel();
+//        try {
+//            reader.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+    }
+
     public StringProperty lastMessageProperty() {
         return lastMessageProperty;
     }
