@@ -7,6 +7,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -27,15 +28,9 @@ public class ClientApp extends Application {
         loginDialog.setTitle("My Chatroom App");
         FXMLLoader fxmlLoader = new FXMLLoader();
         loadLoginDialogFxml(loginDialog, fxmlLoader);
-        LoginDialogController controller = fxmlLoader.getController();
-        initButtons(loginDialog, controller);
-        showLoginDialog(loginDialog, controller);
-    }
-
-    private void showConnectionErrorAlert() {
-        Alert connectionErrorAlert = new Alert(Alert.AlertType.INFORMATION);
-        connectionErrorAlert.setHeaderText("Cannot connect to server");
-        connectionErrorAlert.showAndWait();
+        TextField usernameTextField = ((LoginDialogController) fxmlLoader.getController()).getUsernameTextField();
+        initButtons(loginDialog, usernameTextField);
+        showLoginDialog(loginDialog, usernameTextField);
     }
 
     private void loadLoginDialogFxml(Dialog<ButtonType> dialog, FXMLLoader fxmlLoader) {
@@ -47,17 +42,15 @@ public class ClientApp extends Application {
         }
     }
 
-    private void initButtons(Dialog<ButtonType> dialog, LoginDialogController controller) {
+    private void initButtons(Dialog<ButtonType> dialog, TextField usernameTextField) {
         dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
         dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
 
         Button okButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
-
         okButton.setDisable(true);
-        controller.getUsernameTextField().textProperty().addListener((observable, oldValue, newValue) -> {
-            dialog.getDialogPane().lookupButton(ButtonType.OK).setDisable(newValue.isEmpty());
+        usernameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            okButton.setDisable(newValue.isEmpty());
         });
-
         okButton.addEventFilter(ActionEvent.ACTION, event -> {
             try {
                 client = new Client();
@@ -68,18 +61,24 @@ public class ClientApp extends Application {
         });
     }
 
-    private void showLoginDialog(Dialog<ButtonType> loginDialog, LoginDialogController controller) {
+    private void showConnectionErrorAlert() {
+        Alert connectionErrorAlert = new Alert(Alert.AlertType.INFORMATION);
+        connectionErrorAlert.setHeaderText("Cannot connect to server");
+        connectionErrorAlert.showAndWait();
+    }
+
+    private void showLoginDialog(Dialog<ButtonType> loginDialog, TextField usernameTextField) {
         loginDialog.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
-                startChat(controller);
+                startChat(usernameTextField);
             } else {
                 System.exit(0);
             }
         });
     }
 
-    private void startChat(LoginDialogController controller) {
-        client.logIn(controller.getUsernameTextField().getText());
+    private void startChat(TextField usernameTextField) {
+        client.logIn(usernameTextField.getText());
         ChatWindowController chatWindowController = new ChatWindowController(primaryStage, client);
         chatWindowController.start();
     }
