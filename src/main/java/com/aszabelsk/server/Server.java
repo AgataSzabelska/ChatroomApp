@@ -1,18 +1,21 @@
 package com.aszabelsk.server;
 
-import java.io.BufferedReader;
+import com.aszabelsk.commons.Message;
+
+import java.io.EOFException;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
+import java.net.SocketException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Server {
 
     private ServerSocket serverSocket;
-    private final List<PrintWriter> outputStreams = new ArrayList<>();
+    private final Map<Socket, ObjectOutputStream> socketToObjectOutputStream = new HashMap<>();
 
     public Server() {
         try {
@@ -27,10 +30,10 @@ public class Server {
         while (true) {
             try {
                 Socket clientSocket = serverSocket.accept();
-                PrintWriter writer = new PrintWriter(clientSocket.getOutputStream());
+                ObjectOutputStream writer = new ObjectOutputStream(clientSocket.getOutputStream());
                 System.out.println("Client added: " + clientSocket.getInetAddress() + ":" + clientSocket.getLocalPort());
-                outputStreams.add(writer);
-                Thread thread = new Thread(new MessageForwarder(clientSocket));
+                socketToObjectOutputStream.put(clientSocket, writer);
+                Thread thread = new Thread(new ClientHandler(clientSocket));
                 thread.start();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -39,14 +42,14 @@ public class Server {
     }
 
 
-    public class MessageForwarder implements Runnable {
-        BufferedReader reader;
-        Socket socket;
+    public class ClientHandler implements Runnable {
+        ObjectInputStream reader;
+        Socket clientSocket;
 
-        public MessageForwarder(Socket socket) {
-            this.socket = socket;
+        public ClientHandler(Socket clientSocket) {
+            this.clientSocket = clientSocket;
             try {
-                reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                reader = new ObjectInputStream(clientSocket.getInputStream());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -54,23 +57,27 @@ public class Server {
 
         @Override
         public void run() {
-            String message;
+            Message message;
             try {
-                while ((message = reader.readLine()) != null) {
+                while ((message = (Message) reader.readObject()) != null) {
                     forwardToAll(message);
-                    if (message.equals("quit")) { //TODO change condition
-                        //TODO remove client
-                    }
                 }
-            } catch (IOException e) {
+            } catch (EOFException | SocketException e) {
+                System.out.println("Client disconnected: " + clientSocket.getInetAddress() + ":" + clientSocket.getLocalPort());
+                try {
+                    reader.close();
+                    socketToObjectOutputStream.remove(clientSocket).close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }
 
-        private void forwardToAll(String message) {
-            for (PrintWriter writer : outputStreams) {
-                writer.println(message);
-                writer.flush();
+        private void forwardToAll(Message message) throws IOException {
+            for (ObjectOutputStream writer : socketToObjectOutputStream.values()) {
+                writer.writeObject(message);
             }
         }
     }

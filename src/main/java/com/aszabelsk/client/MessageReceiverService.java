@@ -1,31 +1,32 @@
 package com.aszabelsk.client;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import com.aszabelsk.commons.Message;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 
-import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 
 public class MessageReceiverService extends Service<Void> {
-    private final BufferedReader reader;
-    private final StringProperty lastMessageProperty = new SimpleStringProperty();
+    private final ObjectInputStream reader;
+    private final ObjectProperty<Message> lastMessageProperty = new SimpleObjectProperty<>();
+    private boolean stop;
 
-    public MessageReceiverService(BufferedReader reader) {
+    public MessageReceiverService(ObjectInputStream reader) {
         this.reader = reader;
     }
 
     protected Task<Void> createTask() {
         return new Task<Void>() {
             protected Void call() {
-                String message;
+                Message message;
                 try {
-                    while ((message = reader.readLine()) != null) {
+                    while (!stop && (message = (Message) reader.readObject()) != null) {
                         lastMessageProperty.set(message);
                     }
-                    reader.close();
-                } catch (IOException e) {
+                } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
                 return null;
@@ -33,16 +34,11 @@ public class MessageReceiverService extends Service<Void> {
         };
     }
 
-    public void close() {
-        cancel();
-//        try {
-//            reader.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+    public void stop() {
+        stop = true;
     }
 
-    public StringProperty lastMessageProperty() {
+    public ObjectProperty<Message> lastMessageProperty() {
         return lastMessageProperty;
     }
 }

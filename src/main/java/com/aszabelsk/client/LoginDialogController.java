@@ -13,7 +13,6 @@ public class LoginDialogController {
 
     @FXML
     public void initialize() {
-
     }
 
     public TextField getUsernameTextField() {
