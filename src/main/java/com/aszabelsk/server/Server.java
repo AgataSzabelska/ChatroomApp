@@ -30,7 +30,7 @@ public class Server {
                 PrintWriter writer = new PrintWriter(clientSocket.getOutputStream());
                 System.out.println("Client added: " + clientSocket.getInetAddress() + ":" + clientSocket.getLocalPort());
                 outputStreams.add(writer);
-                Thread thread = new Thread(new ClientNotification(clientSocket));
+                Thread thread = new Thread(new MessageForwarder(clientSocket));
                 thread.start();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -39,11 +39,11 @@ public class Server {
     }
 
 
-    public class ClientNotification implements Runnable {
+    public class MessageForwarder implements Runnable {
         BufferedReader reader;
         Socket socket;
 
-        public ClientNotification(Socket socket) { //TODO rename
+        public MessageForwarder(Socket socket) {
             this.socket = socket;
             try {
                 reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
