@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -61,7 +62,7 @@ public class Server {
                 while ((message = (Message) reader.readObject()) != null) {
                     forwardToAll(message);
                 }
-            } catch (EOFException e) {
+            } catch (EOFException | SocketException e) {
                 System.out.println("Client disconnected: " + clientSocket.getInetAddress() + ":" + clientSocket.getLocalPort());
                 try {
                     reader.close();

@@ -12,6 +12,7 @@ import java.io.ObjectInputStream;
 public class MessageReceiverService extends Service<Void> {
     private final ObjectInputStream reader;
     private final ObjectProperty<Message> lastMessageProperty = new SimpleObjectProperty<>();
+    private boolean stop;
 
     public MessageReceiverService(ObjectInputStream reader) {
         this.reader = reader;
@@ -22,10 +23,9 @@ public class MessageReceiverService extends Service<Void> {
             protected Void call() {
                 Message message;
                 try {
-                    while ((message = (Message) reader.readObject()) != null) {
+                    while (!stop && (message = (Message) reader.readObject()) != null) {
                         lastMessageProperty.set(message);
                     }
-                    reader.close();
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -34,13 +34,8 @@ public class MessageReceiverService extends Service<Void> {
         };
     }
 
-    public void close() {
-        cancel();
-//        try {
-//            reader.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+    public void stop() {
+        stop = true;
     }
 
     public ObjectProperty<Message> lastMessageProperty() {

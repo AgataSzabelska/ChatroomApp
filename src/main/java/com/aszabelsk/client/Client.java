@@ -42,12 +42,14 @@ public class Client {
     }
 
     public void disconnect() {
-        receiverService.close();
-        try {
-            writer.close();
-            socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        receiverService.setOnSucceeded(event -> {
+            try {
+                reader.close();
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        receiverService.stop();
     }
 }
