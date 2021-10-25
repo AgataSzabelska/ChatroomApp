@@ -1,4 +1,4 @@
-package com.aszabelsk;
+package com.aszabelsk.server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,20 +16,21 @@ public class Server {
 
     public Server() {
         try {
-            this.serverSocket = new ServerSocket(2000);
+            serverSocket = new ServerSocket(2000);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void start() {
-//        while (!outputStreams.isEmpty()) {
-        while (true) { //TODO stop condition
+        System.out.println("Server started at " + serverSocket.getInetAddress() + ":" + serverSocket.getLocalPort());
+        while (true) {
             try {
                 Socket clientSocket = serverSocket.accept();
                 PrintWriter writer = new PrintWriter(clientSocket.getOutputStream());
+                System.out.println("Client added: " + clientSocket.getInetAddress() + ":" + clientSocket.getLocalPort());
                 outputStreams.add(writer);
-                Thread thread = new Thread(new ClientNotification(clientSocket));
+                Thread thread = new Thread(new MessageForwarder(clientSocket));
                 thread.start();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -38,11 +39,11 @@ public class Server {
     }
 
 
-    public class ClientNotification implements Runnable {
+    public class MessageForwarder implements Runnable {
         BufferedReader reader;
         Socket socket;
 
-        public ClientNotification(Socket socket) { //TODO rename
+        public MessageForwarder(Socket socket) {
             this.socket = socket;
             try {
                 reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -57,7 +58,7 @@ public class Server {
             try {
                 while ((message = reader.readLine()) != null) {
                     forwardToAll(message);
-                    if (message.equals("quit")) {
+                    if (message.equals("quit")) { //TODO change condition
                         //TODO remove client
                     }
                 }
