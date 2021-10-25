@@ -67,7 +67,6 @@ public class Server {
                 try {
                     reader.close();
                     socketToObjectOutputStream.remove(clientSocket).close();
-                    clientSocket.close();
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
