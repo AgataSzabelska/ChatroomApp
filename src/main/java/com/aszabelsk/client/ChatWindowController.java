@@ -109,7 +109,7 @@ public class ChatWindowController {
 
     private void showEmojiMenu() {
         EmojiMenu emojiMenu = new EmojiMenu(stage, messageField);
-        emojiMenu.show();
+        emojiMenu.show(emojiButton);
     }
 
     @FXML
