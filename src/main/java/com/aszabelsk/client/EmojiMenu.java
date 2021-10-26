@@ -28,18 +28,19 @@ public class EmojiMenu extends GridPane {
         Iterator<Emoji> it = Arrays.stream(Emoji.values()).iterator();
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < columns; col++) {
-                add(initEmojiButton(messageField, it), col, row);
+                add(initEmojiButton(messageField, it.next()), col, row);
             }
         }
     }
 
-    private Button initEmojiButton(TextField messageField, Iterator<Emoji> it) {
-        Button emojiButton = new Button(it.next().getValue());
+    private Button initEmojiButton(TextField messageField, Emoji emoji) {
+        Button emojiButton = new Button(emoji.getValue());
         emojiButton.setOnAction(event -> {
+            messageField.requestFocus();
             int caretPosition = messageField.getCaretPosition();
-            StringBuilder text = new StringBuilder(messageField.getText());
-            text.insert(caretPosition, emojiButton.getText());
-            messageField.setText(text.toString());
+            StringBuilder stringBuilder = new StringBuilder(messageField.getText());
+            stringBuilder.insert(caretPosition, emojiButton.getText());
+            messageField.setText(stringBuilder.toString());
             messageField.positionCaret(caretPosition + 2);
             stage.close();
         });
