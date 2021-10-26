@@ -4,22 +4,29 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 
 public class EmojiMenuController {
 
-    private final Stage stage;
+    private Stage stage;
     private GridPane root;
 
-    public EmojiMenuController(Stage stage) {
-        this.stage = stage;
+    public EmojiMenuController(Stage ownerStage) {
         loadFxml();
+        initStage(ownerStage);
+    }
+
+    private void initStage(Stage ownerStage) {
+        stage = new Stage(StageStyle.UNDECORATED);
+        stage.initOwner(ownerStage);
+//        stage.initModality(Mo);
+        stage.setScene(new Scene(root));
     }
 
     private void loadFxml() {
         FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setController(this);
         fxmlLoader.setLocation(getClass().getResource("emojiMenu.fxml"));
         try {
             root = fxmlLoader.load();
@@ -29,7 +36,6 @@ public class EmojiMenuController {
     }
 
     public void show() {
-        stage.setScene(new Scene(root));
         stage.show();
     }
 }
