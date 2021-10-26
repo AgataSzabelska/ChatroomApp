@@ -103,6 +103,13 @@ public class ChatWindowController {
         client.lastMessageProperty().addListener((observable, oldValue, newValue) -> {
             Platform.runLater(() -> messages.add(newValue));
         });
+
+        emojiButton.setOnMouseClicked(event -> showEmojiMenu());
+    }
+
+    private void showEmojiMenu() {
+        EmojiMenuController emojiMenu = new EmojiMenuController(stage);
+        emojiMenu.show();
     }
 
     @FXML
