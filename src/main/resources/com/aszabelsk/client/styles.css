@@ -1,17 +1,35 @@
 * {
-    -light-blue: #A8F9FF;
+    -light-blue: #D6FCFF;
     -turquoise: #9AE5E6;
     -greyish-green: #81A094;
-    -light-brown: #775B59;
+    -light-brown: #C2AFAE;
     -dark-brown: #32161F;
-
-    -background-colour: -turquoise;
 }
 
 .root {
-    -fx-background-color: -background-colour;
+    -fx-background-color: -light-blue;
+}
+
+.child-layout {
+    -fx-padding: 4px;
+    -fx-background-color: -turquoise, -light-blue;
+    -fx-background-insets: 0, 1;
+}
+
+.text-field {
+    -fx-background-color: -light-brown;
+    -fx-border-color: -dark-brown;
 }
 
 .icon-button {
     -fx-padding: 4px;
+    -fx-background-color: -light-blue;
+}
+
+.icon-button:hover {
+    -fx-background-color: -turquoise;
+}
+
+.icon-button:pressed {
+    -fx-background-color: -greyish-green;
 }
