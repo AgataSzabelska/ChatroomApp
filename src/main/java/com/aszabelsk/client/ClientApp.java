@@ -11,6 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class ClientApp extends Application {
 
@@ -62,8 +63,10 @@ public class ClientApp extends Application {
     }
 
     private void showConnectionErrorAlert() {
-        Alert connectionErrorAlert = new Alert(Alert.AlertType.INFORMATION);
+        Alert connectionErrorAlert = new Alert(Alert.AlertType.INFORMATION); //TODO separate class?
         connectionErrorAlert.setHeaderText("Cannot connect to server");
+        connectionErrorAlert.getDialogPane().getStylesheets().add(
+                Objects.requireNonNull(getClass().getResource("styles.css")).toExternalForm());
         connectionErrorAlert.showAndWait();
     }
 

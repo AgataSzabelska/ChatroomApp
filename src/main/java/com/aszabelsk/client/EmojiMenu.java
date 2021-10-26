@@ -11,6 +11,7 @@ import javafx.stage.StageStyle;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Objects;
 
 public class EmojiMenu extends GridPane {
 
@@ -22,6 +23,8 @@ public class EmojiMenu extends GridPane {
     public EmojiMenu(Stage ownerStage, TextField messageField) {
         initEmojiButtons(messageField);
         initStage(ownerStage);
+        getStylesheets().add(
+                Objects.requireNonNull(getClass().getResource("styles.css")).toExternalForm());
     }
 
     private void initEmojiButtons(TextField messageField) {
