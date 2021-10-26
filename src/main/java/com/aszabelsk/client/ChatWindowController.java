@@ -10,8 +10,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -21,7 +21,7 @@ public class ChatWindowController {
     private final Client client;
 
     private final Stage stage;
-    private VBox root;
+    private GridPane root;
 
     @FXML
     private StackPane sendButton;
@@ -69,7 +69,7 @@ public class ChatWindowController {
 
     private void initStage() {
         stage.setTitle("Chatroom App");
-        stage.setScene(new Scene(root));
+        stage.setScene(new Scene(root, 900, 600));
         stage.setOnCloseRequest(event -> client.disconnect());
         stage.show();
     }
