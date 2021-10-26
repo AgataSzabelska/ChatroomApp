@@ -1,7 +1,17 @@
 * {
-    -background-colour: #9AE5E6;
+    -light-blue: #A8F9FF;
+    -turquoise: #9AE5E6;
+    -greyish-green: #81A094;
+    -light-brown: #775B59;
+    -dark-brown: #32161F;
+
+    -background-colour: -turquoise;
 }
 
 .root {
     -fx-background-color: -background-colour;
+}
+
+.icon-button {
+    -fx-padding: 4px;
 }
