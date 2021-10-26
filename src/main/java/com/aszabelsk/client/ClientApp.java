@@ -68,6 +68,7 @@ public class ClientApp extends Application {
     }
 
     private void showLoginDialog(Dialog<ButtonType> loginDialog, TextField usernameTextField) {
+        loginDialog.setOnShowing(event -> usernameTextField.requestFocus());
         loginDialog.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 startChat(usernameTextField);
