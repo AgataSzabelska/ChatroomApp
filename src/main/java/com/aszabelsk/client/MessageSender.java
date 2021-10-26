@@ -4,7 +4,7 @@ import com.aszabelsk.commons.Message;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.time.LocalDate;
+import java.time.ZonedDateTime;
 
 public class MessageSender implements Runnable {
     private final ObjectOutputStream writer;
@@ -20,7 +20,7 @@ public class MessageSender implements Runnable {
     @Override
     public void run() {
         try {
-            writer.writeObject(new Message(username, message, LocalDate.now()));
+            writer.writeObject(new Message(username, message, ZonedDateTime.now()));
         } catch (IOException e) {
             e.printStackTrace();
         }
