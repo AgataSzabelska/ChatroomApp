@@ -22,7 +22,7 @@ public enum Emoji {
     FEARFUL("😨"),
     FEARFUL_SCREAM("😱");
 
-    private String value;
+    private final String value;
 
     Emoji(String value) {
         this.value = value;
