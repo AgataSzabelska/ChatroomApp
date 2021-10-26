@@ -1,17 +1,17 @@
 package com.aszabelsk.commons;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.ZonedDateTime;
 
 public class Message implements Serializable {
     private final String username;
     private final String message;
-    private final LocalDate localDate;
+    private final ZonedDateTime zonedDateTime;
 
-    public Message(String username, String message, LocalDate localDate) {
+    public Message(String username, String message, ZonedDateTime zonedDateTime) {
         this.username = username;
         this.message = message;
-        this.localDate = localDate;
+        this.zonedDateTime = zonedDateTime;
     }
 
     public String getUsername() {
@@ -22,7 +22,7 @@ public class Message implements Serializable {
         return message;
     }
 
-    public LocalDate getLocalDate() {
-        return localDate;
+    public ZonedDateTime getZonedDateTime() {
+        return zonedDateTime;
     }
 }
