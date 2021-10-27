@@ -38,6 +38,7 @@ public class EmojiMenu extends GridPane {
 
     private Button initEmojiButton(TextField messageField, Emoji emoji) {
         Button emojiButton = new Button(emoji.getValue());
+        emojiButton.getStyleClass().add("icon-button");
         emojiButton.setOnAction(event -> {
             messageField.requestFocus();
             int caretPosition = messageField.getCaretPosition();

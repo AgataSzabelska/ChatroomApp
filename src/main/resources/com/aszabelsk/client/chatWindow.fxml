@@ -8,6 +8,7 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.SVGPath?>
@@ -19,7 +20,11 @@
                 <HBox alignment="CENTER" styleClass="chatroom-header">
                     <children>
                         <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Chatrooms"
-                               HBox.hgrow="ALWAYS"/>
+                               HBox.hgrow="ALWAYS">
+                            <padding>
+                                <Insets left="4.0"/>
+                            </padding>
+                        </Label>
                         <StackPane fx:id="addChatroomButton" styleClass="icon-button">
                             <children>
                                 <SVGPath
@@ -38,12 +43,12 @@
                         </StackPane>
                     </children>
                 </HBox>
-                <ListView maxHeight="1.7976931348623157E308" prefWidth="200.0" GridPane.rowIndex="1"
-                          GridPane.vgrow="ALWAYS"/>
+                <ListView maxHeight="1.7976931348623157E308" prefWidth="200.0" styleClass="chatroom-list"
+                          GridPane.rowIndex="1" GridPane.vgrow="ALWAYS"/>
                 <VBox maxHeight="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="1"
                       GridPane.vgrow="ALWAYS">
                     <children>
-                        <ListView fx:id="messageListView" VBox.vgrow="ALWAYS"/>
+                        <ListView fx:id="messageListView" styleClass="message-list" VBox.vgrow="ALWAYS"/>
                         <HBox styleClass="child-layout">
                             <children>
                                 <TextField fx:id="messageField" HBox.hgrow="ALWAYS">
@@ -80,6 +85,10 @@
                 <ColumnConstraints/>
                 <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308"/>
             </columnConstraints>
+            <rowConstraints>
+                <RowConstraints/>
+                <RowConstraints/>
+            </rowConstraints>
         </GridPane>
     </children>
 </AnchorPane>
