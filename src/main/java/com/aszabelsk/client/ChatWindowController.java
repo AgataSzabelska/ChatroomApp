@@ -6,11 +6,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -21,7 +21,7 @@ public class ChatWindowController {
     private final Client client;
 
     private final Stage stage;
-    private GridPane root;
+    private Parent root;
 
     @FXML
     private StackPane sendButton;
@@ -105,11 +105,16 @@ public class ChatWindowController {
         });
 
         emojiButton.setOnMouseClicked(event -> showEmojiMenu());
+        addChatroomButton.setOnMouseClicked(event -> showAddChatroomPopup());
     }
 
     private void showEmojiMenu() {
         EmojiMenu emojiMenu = new EmojiMenu(stage, messageField);
         emojiMenu.show(emojiButton);
+    }
+
+    private void showAddChatroomPopup() {
+        //TODO
     }
 
     @FXML

@@ -1,8 +1,11 @@
 * {
     -light-blue: #D6FCFF;
-    -turquoise: #9AE5E6;
-    -greyish-green: #81A094;
-    -light-brown: #C2AFAE;
+    -light-turquoise: #9AE5E6;
+    -dark-turquoise: #7cbebf;
+    -warm-light-brown: #fff4ed;
+    -cold-light-brown: #f2e7e6;
+    -cold-medium-brown: #dec9c8;
+    -cold-dark-brown: #c9b4b3;
     -dark-brown: #32161F;
 }
 
@@ -11,14 +14,11 @@
 }
 
 .child-layout {
-    -fx-padding: 4px;
-    -fx-background-color: -turquoise, -light-blue;
-    -fx-background-insets: 0, 1;
+    -fx-background-color: -light-blue;
 }
 
 .text-field {
-    -fx-background-color: -light-brown;
-    -fx-border-color: -dark-brown;
+    -fx-background-color: -cold-medium-brown;
 }
 
 .icon-button {
@@ -27,9 +27,29 @@
 }
 
 .icon-button:hover {
-    -fx-background-color: -turquoise;
+    -fx-background-color: -light-turquoise;
 }
 
 .icon-button:pressed {
-    -fx-background-color: -greyish-green;
+    -fx-background-color: -dark-turquoise;
+}
+
+.list-view {
+    -fx-background-color: -cold-light-brown;
+}
+
+.chatroom-header {
+    -fx-background-color: -cold-medium-brown;
+}
+
+.chatroom-header .icon-button {
+    -fx-background-color: -cold-medium-brown;
+}
+
+.chatroom-header .icon-button:hover {
+    -fx-background-color: -cold-light-brown;
+}
+
+.chatroom-header .icon-button:pressed {
+    -fx-background-color: -cold-dark-brown;
 }
