@@ -2,11 +2,8 @@ package com.aszabelsk.client;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -21,43 +18,24 @@ public class ClientApp extends Application {
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
-        promptLogin();
+        showLoginDialog();
     }
 
-    private void promptLogin() {
-        Dialog<ButtonType> loginDialog = new Dialog<>();
-        loginDialog.setTitle("My Chatroom App");
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        loadLoginDialogFxml(loginDialog, fxmlLoader);
-        TextField usernameTextField = ((LoginDialogController) fxmlLoader.getController()).getUsernameTextField();
-        initButtons(loginDialog, usernameTextField);
-        showLoginDialog(loginDialog, usernameTextField);
-    }
-
-    private void loadLoginDialogFxml(Dialog<ButtonType> dialog, FXMLLoader fxmlLoader) {
-        fxmlLoader.setLocation(getClass().getResource("loginDialog.fxml"));
-        try {
-            dialog.getDialogPane().setContent(fxmlLoader.load());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void initButtons(Dialog<ButtonType> dialog, TextField usernameTextField) {
-        dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
-        dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
-
-        Button okButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
-        okButton.setDisable(true);
-        usernameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            okButton.setDisable(newValue.isEmpty());
-        });
-        okButton.addEventFilter(ActionEvent.ACTION, event -> {
+    private void showLoginDialog() {
+        LoginDialog<ButtonType> loginDialog = new LoginDialog<>();
+        loginDialog.getOkButton().addEventFilter(ActionEvent.ACTION, event -> {
             try {
                 client = new Client();
             } catch (IOException e) {
                 event.consume();
                 showConnectionErrorAlert();
+            }
+        });
+        loginDialog.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                startChat(loginDialog.getUsernameTextField());
+            } else {
+                System.exit(0);
             }
         });
     }
@@ -68,17 +46,6 @@ public class ClientApp extends Application {
         connectionErrorAlert.getDialogPane().getStylesheets().add(
                 Objects.requireNonNull(getClass().getResource("styles.css")).toExternalForm());
         connectionErrorAlert.showAndWait();
-    }
-
-    private void showLoginDialog(Dialog<ButtonType> loginDialog, TextField usernameTextField) {
-        loginDialog.setOnShowing(event -> usernameTextField.requestFocus());
-        loginDialog.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.OK) {
-                startChat(usernameTextField);
-            } else {
-                System.exit(0);
-            }
-        });
     }
 
     private void startChat(TextField usernameTextField) {
