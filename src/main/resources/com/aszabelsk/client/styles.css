@@ -12,9 +12,12 @@
 
 .root {
     -fx-background-color: -light-blue;
+    -fx-font-size: 20px;
+}
+
+.root * {
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
-    -fx-font-size: 20px;
 }
 
 .child-layout {
@@ -25,9 +28,24 @@
     -fx-background-color: -medium-brown;
 }
 
+.button {
+    -fx-background-color: -light-blue;
+    -fx-border-color: -dark-turquoise;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-width: 2;
+}
+
+.button-bar .button:default {
+    -fx-background-color: -light-turquoise;
+}
+
 .icon-button {
     -fx-background-color: -light-blue;
+    -fx-border-color: transparent;
     -fx-padding: 8;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
 }
 
 .icon-button SVGPath {
@@ -35,11 +53,11 @@
     -fx-scale-y: 0.06em;
 }
 
-.icon-button:hover {
+.icon-button:hover, .button:hover {
     -fx-background-color: -light-turquoise;
 }
 
-.icon-button:pressed {
+.icon-button:pressed, .button:pressed, .button-bar .button:default:pressed {
     -fx-background-color: -dark-turquoise;
 }
 

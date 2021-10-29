@@ -24,7 +24,7 @@ public class LoginDialog<T> extends Dialog<T> {
         setTitle("My Chatroom App");
         loadFxml();
         initButtons();
-//        getDialogPane().getStylesheets().add((this.getClass().getResource("style.css").toExternalForm()));
+        getDialogPane().getStylesheets().add((this.getClass().getResource("styles.css").toExternalForm()));
         setOnShowing(event -> usernameTextField.requestFocus());
     }
 
