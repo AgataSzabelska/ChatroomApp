@@ -88,6 +88,10 @@
     -fx-background-color: -cold-dark-brown;
 }
 
-.alert .header-panel {
-    -fx-background-color: -light-blue;
+.alert {
+    -fx-padding: 10;
+}
+
+.alert .content, .alert .button-bar .container, .alert .graphic-container {
+    -fx-padding: 0;
 }
