@@ -15,11 +15,6 @@
     -fx-font-size: 20px;
 }
 
-.root * {
-    -fx-focus-color: transparent;
-    -fx-faint-focus-color: transparent;
-}
-
 .child-layout {
     -fx-background-color: -light-blue;
 }
