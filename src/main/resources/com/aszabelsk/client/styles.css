@@ -56,6 +56,10 @@
     -fx-background-color: -dark-turquoise;
 }
 
+.list-view {
+	-fx-background-insets: 0;
+}
+
 .list-view.message-list {
     -fx-background-color: -light-brown;
 }
