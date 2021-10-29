@@ -87,3 +87,7 @@
 .chatroom-header .icon-button:pressed {
     -fx-background-color: -cold-dark-brown;
 }
+
+.alert .header-panel {
+    -fx-background-color: -light-blue;
+}

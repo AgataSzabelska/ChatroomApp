@@ -2,13 +2,11 @@ package com.aszabelsk.client;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Objects;
 
 public class ClientApp extends Application {
 
@@ -28,7 +26,7 @@ public class ClientApp extends Application {
                 client = new Client();
             } catch (IOException e) {
                 event.consume();
-                showConnectionErrorAlert();
+                new ConnectionErrorAlert().showAndWait();
             }
         });
         loginDialog.showAndWait().ifPresent(response -> {
@@ -38,14 +36,6 @@ public class ClientApp extends Application {
                 System.exit(0);
             }
         });
-    }
-
-    private void showConnectionErrorAlert() {
-        Alert connectionErrorAlert = new Alert(Alert.AlertType.INFORMATION); //TODO separate class?
-        connectionErrorAlert.setHeaderText("Cannot connect to server");
-        connectionErrorAlert.getDialogPane().getStylesheets().add(
-                Objects.requireNonNull(getClass().getResource("styles.css")).toExternalForm());
-        connectionErrorAlert.showAndWait();
     }
 
     private void startChat(TextField usernameTextField) {
