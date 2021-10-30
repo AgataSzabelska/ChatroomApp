@@ -32,7 +32,7 @@ public class MessageListCellFactory implements Callback<ListView<Message>, ListC
             final Label usernameLabel = new Label();
             final Label dateLabel = new Label();
             final Label messageTextLabel = new Label();
-            final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm  dd-MM-yyyy");
+            final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm, dd-MM-yyyy");
 
             {
                 messageTextLabel.setWrapText(true);

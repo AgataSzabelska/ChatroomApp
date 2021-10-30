@@ -70,7 +70,7 @@
 
 .list-view.message-list .list-cell .message-box {
     -fx-background-radius: 16;
-    -fx-padding: 4;
+    -fx-padding: 8;
 }
 
 .list-view.message-list .list-cell .message-box.logged-in-user-message {
@@ -91,7 +91,7 @@
 
 .chatroom-header {
     -fx-background-color: -medium-brown;
-    -fx-padding: 8;
+    -fx-padding: 4 8 4 8;
 }
 
 .chatroom-header .icon-button {
