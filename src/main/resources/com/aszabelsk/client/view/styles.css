@@ -56,6 +56,10 @@
     -fx-background-color: -dark-turquoise;
 }
 
+.message-bar {
+    -fx-padding: 8 0 0 8;
+}
+
 .list-view {
 	-fx-background-insets: 0;
 }
@@ -87,6 +91,7 @@
 
 .chatroom-header {
     -fx-background-color: -medium-brown;
+    -fx-padding: 8;
 }
 
 .chatroom-header .icon-button {
