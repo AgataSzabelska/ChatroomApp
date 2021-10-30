@@ -1,4 +1,4 @@
-package com.aszabelsk.client;
+package com.aszabelsk.client.view;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,6 +9,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class LoginDialog<T> extends Dialog<T> {
 
@@ -24,7 +25,7 @@ public class LoginDialog<T> extends Dialog<T> {
         setTitle("My Chatroom App");
         loadFxml();
         initButtons();
-        getDialogPane().getStylesheets().add((this.getClass().getResource("styles.css").toExternalForm()));
+        getDialogPane().getStylesheets().add((Objects.requireNonNull(this.getClass().getResource("styles.css")).toExternalForm()));
         setOnShowing(event -> usernameTextField.requestFocus());
     }
 

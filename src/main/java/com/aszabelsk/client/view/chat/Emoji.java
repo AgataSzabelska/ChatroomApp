@@ -1,4 +1,4 @@
-package com.aszabelsk.client;
+package com.aszabelsk.client.view.chat;
 
 public enum Emoji {
     SLIGHT_SMILE("🙂"),

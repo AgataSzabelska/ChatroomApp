@@ -1,4 +1,4 @@
-package com.aszabelsk.client;
+package com.aszabelsk.client.view;
 
 import javafx.scene.control.Alert;
 

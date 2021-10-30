@@ -1,5 +1,6 @@
-package com.aszabelsk.client;
+package com.aszabelsk.client.view.chat;
 
+import com.aszabelsk.client.model.Client;
 import com.aszabelsk.commons.Message;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;

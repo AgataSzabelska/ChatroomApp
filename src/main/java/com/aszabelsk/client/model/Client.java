@@ -1,4 +1,4 @@
-package com.aszabelsk.client;
+package com.aszabelsk.client.model;
 
 import com.aszabelsk.commons.Message;
 import javafx.beans.property.ObjectProperty;

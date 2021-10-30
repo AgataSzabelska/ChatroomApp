@@ -1,5 +1,9 @@
 package com.aszabelsk.client;
 
+import com.aszabelsk.client.model.Client;
+import com.aszabelsk.client.view.chat.ChatWindowController;
+import com.aszabelsk.client.view.ConnectionErrorAlert;
+import com.aszabelsk.client.view.LoginDialog;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.scene.control.ButtonType;

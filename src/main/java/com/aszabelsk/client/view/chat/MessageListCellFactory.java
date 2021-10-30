@@ -1,4 +1,4 @@
-package com.aszabelsk.client;
+package com.aszabelsk.client.view.chat;
 
 import com.aszabelsk.commons.Message;
 import javafx.scene.control.Label;

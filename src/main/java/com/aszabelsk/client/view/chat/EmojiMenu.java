@@ -1,4 +1,4 @@
-package com.aszabelsk.client;
+package com.aszabelsk.client.view.chat;
 
 import javafx.geometry.Bounds;
 import javafx.scene.Scene;
