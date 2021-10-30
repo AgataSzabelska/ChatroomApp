@@ -77,7 +77,7 @@ public class ChatWindowController {
 
     private void initMessageListView() {
         messageListView.setItems(messages);
-        messageListView.setCellFactory(new MessageListCellFactory());
+        messageListView.setCellFactory(new MessageListCellFactory(client.getUserUUID()));
     }
 
     private void addTooltips() {

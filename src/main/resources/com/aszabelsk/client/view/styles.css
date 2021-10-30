@@ -60,8 +60,21 @@
 	-fx-background-insets: 0;
 }
 
-.list-view.message-list {
+.list-view.message-list, .list-view.message-list .list-cell {
     -fx-background-color: -light-brown;
+}
+
+.list-view.message-list .list-cell .message-box {
+    -fx-background-radius: 16;
+    -fx-padding: 4;
+}
+
+.list-view.message-list .list-cell .message-box.logged-in-user-message {
+    -fx-background-color: -dark-turquoise;
+}
+
+.list-view.message-list .list-cell .message-box.other-user-message {
+    -fx-background-color: -light-blue;
 }
 
 .list-view.chatroom-list {
