@@ -11,7 +11,7 @@ import javafx.scene.control.TextField;
 import java.io.IOException;
 import java.util.Objects;
 
-public class LoginDialog<T> extends Dialog<T> {
+public class LoginDialog extends Dialog<ButtonType> {
 
     @FXML
     private TextField usernameTextField;

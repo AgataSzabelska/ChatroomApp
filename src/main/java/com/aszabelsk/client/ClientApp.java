@@ -7,7 +7,6 @@ import com.aszabelsk.client.view.chat.ChatWindowController;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -15,6 +14,7 @@ import java.io.IOException;
 public class ClientApp extends Application {
 
     private Client client;
+
     private Stage primaryStage;
 
     @Override
@@ -24,7 +24,7 @@ public class ClientApp extends Application {
     }
 
     private void showLoginDialog() {
-        LoginDialog<ButtonType> loginDialog = new LoginDialog<>();
+        LoginDialog loginDialog = new LoginDialog();
         loginDialog.getOkButton().addEventFilter(ActionEvent.ACTION, event -> {
             try {
                 client = new Client();
@@ -35,15 +35,15 @@ public class ClientApp extends Application {
         });
         loginDialog.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
-                startChat(loginDialog.getUsernameTextField());
+                startChat(loginDialog.getUsernameTextField().getText());
             } else {
                 System.exit(0);
             }
         });
     }
 
-    private void startChat(TextField usernameTextField) {
-        client.logIn(usernameTextField.getText());
+    private void startChat(String username) {
+        client.logIn(username);
         ChatWindowController chatWindowController = new ChatWindowController(primaryStage, client);
         chatWindowController.start();
     }
