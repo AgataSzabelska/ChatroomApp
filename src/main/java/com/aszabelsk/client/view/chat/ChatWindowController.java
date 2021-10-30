@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -37,7 +38,7 @@ public class ChatWindowController {
     private StackPane emojiButton;
 
     @FXML
-    private TextField messageField;
+    private TextField messageTextField;
 
     @FXML
     private ListView<Message> messageListView;
@@ -88,16 +89,16 @@ public class ChatWindowController {
     }
 
     public void start() {
-        registerListeners(client);
+        registerListeners();
         client.start();
     }
 
-    private void registerListeners(Client client) {
-        sendButton.setOnMouseClicked(event -> {
-            String message = messageField.getText();
-            if (!message.isEmpty()) {
-                client.sendMessage(message);
-                messageField.clear();
+    private void registerListeners() {
+        sendButton.setOnMouseClicked(event -> sendMessage());
+
+        messageTextField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                sendMessage();
             }
         });
 
@@ -109,8 +110,16 @@ public class ChatWindowController {
         addChatroomButton.setOnMouseClicked(event -> showAddChatroomPopup());
     }
 
+    private void sendMessage() {
+        String message = messageTextField.getText();
+        if (!message.isEmpty()) {
+            client.sendMessage(message);
+            messageTextField.clear();
+        }
+    }
+
     private void showEmojiMenu() {
-        EmojiMenu emojiMenu = EmojiMenu.getInstance(messageField);
+        EmojiMenu emojiMenu = EmojiMenu.getInstance(messageTextField);
         emojiMenu.show(emojiButton);
     }
 

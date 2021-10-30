@@ -51,7 +51,7 @@
                         <ListView fx:id="messageListView" styleClass="message-list" VBox.vgrow="ALWAYS"/>
                         <HBox alignment="BOTTOM_CENTER" styleClass="child-layout">
                             <children>
-                                <TextField fx:id="messageField" HBox.hgrow="ALWAYS"/>
+                                <TextField fx:id="messageTextField" HBox.hgrow="ALWAYS"/>
                                 <StackPane fx:id="emojiButton" styleClass="icon-button">
                                     <children>
                                         <SVGPath
