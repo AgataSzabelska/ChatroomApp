@@ -55,6 +55,11 @@ public class EmojiMenu extends GridPane {
         stage = new Stage(StageStyle.UNDECORATED);
         stage.initOwner(ownerStage);
         stage.setScene(new Scene(this));
+        focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                stage.close();
+            }
+        });
     }
 
     public void show(StackPane ownerNode) {

@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.SVGPath?>
 <?import java.lang.String?>
-<AnchorPane stylesheets="@../client/styles.css" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <GridPane AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="16.0"
                   AnchorPane.topAnchor="16.0">
