@@ -11,7 +11,6 @@ import javafx.stage.StageStyle;
 
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.Objects;
 
 public class EmojiMenu extends GridPane {
 
@@ -23,8 +22,7 @@ public class EmojiMenu extends GridPane {
     public EmojiMenu(Stage ownerStage, TextField messageField) {
         initEmojiButtons(messageField);
         initStage(ownerStage);
-        getStylesheets().add(
-                Objects.requireNonNull(getClass().getResource("styles.css")).toExternalForm());
+        getStylesheets().add("com/aszabelsk/client/view/styles.css");
     }
 
     private void initEmojiButtons(TextField messageField) {
@@ -55,11 +53,7 @@ public class EmojiMenu extends GridPane {
         stage = new Stage(StageStyle.UNDECORATED);
         stage.initOwner(ownerStage);
         stage.setScene(new Scene(this));
-        focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue) {
-                stage.close();
-            }
-        });
+//TODO autohide
     }
 
     public void show(StackPane ownerNode) {
