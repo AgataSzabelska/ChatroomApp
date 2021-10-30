@@ -110,7 +110,7 @@ public class ChatWindowController {
     }
 
     private void showEmojiMenu() {
-        EmojiMenu emojiMenu = new EmojiMenu(stage, messageField);
+        EmojiMenu emojiMenu = new EmojiMenu(messageField);
         emojiMenu.show(emojiButton);
     }
 

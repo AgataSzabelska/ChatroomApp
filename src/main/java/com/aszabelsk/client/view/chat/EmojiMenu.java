@@ -1,35 +1,34 @@
 package com.aszabelsk.client.view.chat;
 
 import javafx.geometry.Bounds;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+import javafx.scene.layout.Region;
+import javafx.stage.Popup;
 
 import java.util.Arrays;
 import java.util.Iterator;
 
-public class EmojiMenu extends GridPane {
+public class EmojiMenu extends Popup {
 
-    private Stage stage;
+    private GridPane root = new GridPane();
 
     private final int rows = 5;
     private final int columns = 4;
 
-    public EmojiMenu(Stage ownerStage, TextField messageField) {
+    public EmojiMenu(TextField messageField) {
         initEmojiButtons(messageField);
-        initStage(ownerStage);
-        getStylesheets().add("com/aszabelsk/client/view/styles.css");
+        getContent().add(root);
+        setAutoHide(true);
+        root.getStylesheets().add("com/aszabelsk/client/view/styles.css");
     }
 
     private void initEmojiButtons(TextField messageField) {
         Iterator<Emoji> it = Arrays.stream(Emoji.values()).iterator();
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < columns; col++) {
-                add(initEmojiButton(messageField, it.next()), col, row);
+                root.add(initEmojiButton(messageField, it.next()), col, row);
             }
         }
     }
@@ -44,22 +43,15 @@ public class EmojiMenu extends GridPane {
             stringBuilder.insert(caretPosition, emojiButton.getText());
             messageField.setText(stringBuilder.toString());
             messageField.positionCaret(caretPosition + 2);
-            stage.close();
+            hide();
         });
         return emojiButton;
     }
 
-    private void initStage(Stage ownerStage) {
-        stage = new Stage(StageStyle.UNDECORATED);
-        stage.initOwner(ownerStage);
-        stage.setScene(new Scene(this));
-//TODO autohide
-    }
-
-    public void show(StackPane ownerNode) {
+    public void show(Region ownerNode) {
         Bounds boundsInScreen = ownerNode.localToScreen(ownerNode.getBoundsInLocal());
-        stage.show();
-        stage.setX(boundsInScreen.getMinX() - getWidth() + ownerNode.getWidth());
-        stage.setY(boundsInScreen.getMinY() - getHeight());
+        show(ownerNode, 0, 0);
+        setX(boundsInScreen.getMinX() - getWidth() + ownerNode.getWidth());
+        setY(boundsInScreen.getMinY() - getHeight());
     }
 }
