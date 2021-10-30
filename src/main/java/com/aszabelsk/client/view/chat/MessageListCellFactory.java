@@ -65,13 +65,15 @@ public class MessageListCellFactory implements Callback<ListView<Message>, ListC
             }
 
             private void setStyleClass(UUID messageAuthorUUID) {
+                ObservableList<String> styleClassList = root.getStyleClass();
                 String messageStyleClass;
                 if (messageAuthorUUID.equals(userUUID)) {
                     messageStyleClass = loggedInUserMessageStyleClass;
+                    styleClassList.removeAll(otherUserMessageStyleClass);
                 } else {
                     messageStyleClass = otherUserMessageStyleClass;
+                    styleClassList.removeAll(loggedInUserMessageStyleClass);
                 }
-                ObservableList<String> styleClassList = root.getStyleClass();
                 if (!styleClassList.contains(messageStyleClass)) {
                     styleClassList.add(messageStyleClass);
                 }
