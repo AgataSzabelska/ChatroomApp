@@ -14,7 +14,7 @@ public class EmojiMenu extends Popup {
 
     private static EmojiMenu instance;
 
-    private GridPane root = new GridPane();
+    private final GridPane root = new GridPane();
 
     private final int rows = 5;
     private final int columns = 4;
