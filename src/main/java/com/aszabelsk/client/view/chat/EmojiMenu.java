@@ -12,12 +12,21 @@ import java.util.Iterator;
 
 public class EmojiMenu extends Popup {
 
+    private static EmojiMenu instance;
+
     private GridPane root = new GridPane();
 
     private final int rows = 5;
     private final int columns = 4;
 
-    public EmojiMenu(TextField messageField) {
+    public static EmojiMenu getInstance(TextField messageField) {
+        if (instance == null) {
+            instance = new EmojiMenu(messageField);
+        }
+        return instance;
+    }
+
+    private EmojiMenu(TextField messageField) {
         initEmojiButtons(messageField);
         getContent().add(root);
         setAutoHide(true);
