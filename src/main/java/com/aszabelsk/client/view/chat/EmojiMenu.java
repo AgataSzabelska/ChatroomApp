@@ -31,6 +31,7 @@ public class EmojiMenu extends Popup {
         getContent().add(root);
         setAutoHide(true);
         root.getStylesheets().add("com/aszabelsk/client/view/styles.css");
+        root.getStyleClass().add("root");
     }
 
     private void initEmojiButtons(TextField messageField) {
