@@ -3,11 +3,11 @@ package com.aszabelsk.client;
 import javafx.scene.control.TextArea;
 
 public class TextUtils {
-    public static void insertText(TextArea messageTextArea, String text) {
-        int caretPosition = messageTextArea.getCaretPosition();
-        StringBuilder stringBuilder = new StringBuilder(messageTextArea.getText());
+    public static void insertText(TextArea textArea, String text) {
+        int caretPosition = textArea.getCaretPosition();
+        StringBuilder stringBuilder = new StringBuilder(textArea.getText());
         stringBuilder.insert(caretPosition, text);
-        messageTextArea.setText(stringBuilder.toString());
-        messageTextArea.positionCaret(caretPosition + text.length());
+        textArea.setText(stringBuilder.toString());
+        textArea.positionCaret(caretPosition + text.length());
     }
 }
