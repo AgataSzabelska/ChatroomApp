@@ -5,8 +5,9 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
 import java.time.ZonedDateTime;
@@ -28,7 +29,7 @@ public class MessageListCellFactory implements Callback<ListView<Message>, ListC
     @Override
     public ListCell<Message> call(ListView<Message> p) {
         return new ListCell<Message>() {
-            final GridPane root = new GridPane();
+            final VBox root = new VBox();
             final Label usernameLabel = new Label();
             final Label dateLabel = new Label();
             final Label messageTextLabel = new Label();
@@ -36,12 +37,12 @@ public class MessageListCellFactory implements Callback<ListView<Message>, ListC
 
             {
                 messageTextLabel.setWrapText(true);
-                root.add(usernameLabel, 0, 0);
-                root.add(dateLabel, 1, 0);
-                root.add(messageTextLabel, 0, 1);
+                HBox topLayout = new HBox(usernameLabel, dateLabel);
+                HBox.setHgrow(usernameLabel, Priority.ALWAYS);
+                usernameLabel.setMaxWidth(10E6);
+                root.getChildren().add(topLayout);
+                root.getChildren().add(messageTextLabel);
                 root.getStyleClass().add(messageBoxStyleClass);
-                GridPane.setHgrow(usernameLabel, Priority.ALWAYS);
-                GridPane.setHgrow(messageTextLabel, Priority.ALWAYS);
             }
 
             @Override
