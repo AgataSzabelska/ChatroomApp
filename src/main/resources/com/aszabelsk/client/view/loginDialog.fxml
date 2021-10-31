@@ -4,9 +4,8 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
-<VBox prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.aszabelsk.client.LoginDialogController">
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      stylesheets="@styles.css" styleClass="root" prefHeight="400.0" prefWidth="600.0">
     <children>
         <Label text="Username:"/>
         <TextField fx:id="usernameTextField"/>

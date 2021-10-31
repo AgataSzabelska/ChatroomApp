@@ -1,17 +1,20 @@
-package com.aszabelsk.client;
+package com.aszabelsk.client.view.chat;
 
+import com.aszabelsk.client.TextUtils;
+import com.aszabelsk.client.model.Client;
 import com.aszabelsk.commons.Message;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.Tooltip;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -21,7 +24,7 @@ public class ChatWindowController {
     private final Client client;
 
     private final Stage stage;
-    private VBox root;
+    private Parent root;
 
     @FXML
     private StackPane sendButton;
@@ -36,7 +39,7 @@ public class ChatWindowController {
     private StackPane emojiButton;
 
     @FXML
-    private TextField messageField;
+    private TextArea messageTextArea;
 
     @FXML
     private ListView<Message> messageListView;
@@ -54,6 +57,7 @@ public class ChatWindowController {
         initStage();
         initMessageListView();
         addTooltips();
+        messageTextArea.requestFocus();
     }
 
     private void loadFxml() {
@@ -69,14 +73,14 @@ public class ChatWindowController {
 
     private void initStage() {
         stage.setTitle("Chatroom App");
-        stage.setScene(new Scene(root));
+        stage.setScene(new Scene(root, 900, 600));
         stage.setOnCloseRequest(event -> client.disconnect());
         stage.show();
     }
 
     private void initMessageListView() {
         messageListView.setItems(messages);
-        messageListView.setCellFactory(new MessageListCellFactory());
+        messageListView.setCellFactory(new MessageListCellFactory(client.getUserUUID()));
     }
 
     private void addTooltips() {
@@ -87,29 +91,49 @@ public class ChatWindowController {
     }
 
     public void start() {
-        registerListeners(client);
+        registerListeners();
         client.start();
     }
 
-    private void registerListeners(Client client) {
-        sendButton.setOnMouseClicked(event -> {
-            String message = messageField.getText();
-            if (!message.isEmpty()) {
-                client.sendMessage(message);
-                messageField.clear();
-            }
-        });
+    private void registerListeners() {
+        sendButton.setOnMouseClicked(event -> sendMessage());
+
+        messageTextArea
+                .setOnKeyPressed(event -> {
+                    if (event.getCode() == KeyCode.ENTER) {
+                        if (event.isAltDown()) {
+                            TextUtils.insertText(messageTextArea, "\n");
+                        } else {
+                            sendMessage();
+                        }
+                        event.consume();
+                    }
+                });
 
         client.lastMessageProperty().addListener((observable, oldValue, newValue) -> {
             Platform.runLater(() -> messages.add(newValue));
         });
 
         emojiButton.setOnMouseClicked(event -> showEmojiMenu());
+
+        addChatroomButton.setOnMouseClicked(event -> showAddChatroomPopup());
+    }
+
+    private void sendMessage() {
+        String message = messageTextArea.getText();
+        if (!message.isEmpty()) {
+            client.sendMessage(message);
+            messageTextArea.clear();
+        }
     }
 
     private void showEmojiMenu() {
-        EmojiMenu emojiMenu = new EmojiMenu(stage, messageField);
+        EmojiMenu emojiMenu = EmojiMenu.getInstance(messageTextArea);
         emojiMenu.show(emojiButton);
+    }
+
+    private void showAddChatroomPopup() {
+        //TODO
     }
 
     @FXML
