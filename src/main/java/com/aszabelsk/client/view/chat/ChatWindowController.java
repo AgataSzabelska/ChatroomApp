@@ -18,6 +18,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 public class ChatWindowController {
 
@@ -46,23 +47,24 @@ public class ChatWindowController {
 
     private final ObservableList<Message> messages = FXCollections.observableArrayList();
 
-    public ChatWindowController(Stage stage, Client client) {
+    public ChatWindowController(Stage stage, Client client, ResourceBundle resourceBundle) {
         this.stage = stage;
         this.client = client;
-        initView();
+        initView(resourceBundle);
     }
 
-    private void initView() {
-        loadFxml();
-        initStage();
+    private void initView(ResourceBundle resourceBundle) {
+        loadFxml(resourceBundle);
+        initStage(resourceBundle);
         initMessageListView();
-        addTooltips();
+        addTooltips(resourceBundle);
         messageTextArea.requestFocus();
     }
 
-    private void loadFxml() {
+    private void loadFxml(ResourceBundle resourceBundle) {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setController(this);
+        fxmlLoader.setResources(resourceBundle);
         fxmlLoader.setLocation(getClass().getResource("chatWindow.fxml"));
         try {
             root = fxmlLoader.load();
@@ -71,8 +73,8 @@ public class ChatWindowController {
         }
     }
 
-    private void initStage() {
-        stage.setTitle("Chatroom App");
+    private void initStage(ResourceBundle resourceBundle) {
+        stage.setTitle(resourceBundle.getString("chatWindowController.chatroomTitle"));
         stage.setScene(new Scene(root, 900, 600));
         stage.setOnCloseRequest(event -> client.disconnect());
         stage.show();
@@ -83,11 +85,11 @@ public class ChatWindowController {
         messageListView.setCellFactory(new MessageListCellFactory(client.getUserUUID()));
     }
 
-    private void addTooltips() {
-        Tooltip.install(settingsButton, new Tooltip("Settings"));
-        Tooltip.install(addChatroomButton, new Tooltip("Add new chatroom"));
-        Tooltip.install(emojiButton, new Tooltip("Add emoji"));
-        Tooltip.install(sendButton, new Tooltip("Send message"));
+    private void addTooltips(ResourceBundle resourceBundle) {
+        Tooltip.install(settingsButton, new Tooltip(resourceBundle.getString("chatWindowController.settings")));
+        Tooltip.install(addChatroomButton, new Tooltip(resourceBundle.getString("chatWindowController.addNewChatroom")));
+        Tooltip.install(emojiButton, new Tooltip(resourceBundle.getString("chatWindowController.insertEmoji")));
+        Tooltip.install(sendButton, new Tooltip(resourceBundle.getString("chatWindowController.sendMessage")));
     }
 
     public void start() {

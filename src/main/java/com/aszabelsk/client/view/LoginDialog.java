@@ -10,6 +10,7 @@ import javafx.scene.control.TextField;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
 public class LoginDialog extends Dialog<ButtonType> {
 
@@ -21,17 +22,18 @@ public class LoginDialog extends Dialog<ButtonType> {
 
     private Button okButton;
 
-    public LoginDialog() {
-        setTitle("My Chatroom App");
-        loadFxml();
+    public LoginDialog(ResourceBundle resourceBundle) {
+        setTitle(resourceBundle.getString("loginDialog.loginTitle"));
+        loadFxml(resourceBundle);
         initButtons();
         getDialogPane().getStylesheets().add((Objects.requireNonNull(this.getClass().getResource("styles.css")).toExternalForm()));
         setOnShowing(event -> usernameTextField.requestFocus());
     }
 
-    private void loadFxml() {
+    private void loadFxml(ResourceBundle resourceBundle) {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setController(this);
+        fxmlLoader.setResources(resourceBundle);
         fxmlLoader.setLocation(getClass().getResource("loginDialog.fxml"));
         try {
             getDialogPane().setContent(fxmlLoader.load());
@@ -49,7 +51,6 @@ public class LoginDialog extends Dialog<ButtonType> {
         usernameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             okButton.setDisable(newValue.isEmpty());
         });
-
     }
 
     public TextField getUsernameTextField() {
