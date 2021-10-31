@@ -115,6 +115,7 @@ public class ChatWindowController {
         });
 
         emojiButton.setOnMouseClicked(event -> showEmojiMenu());
+
         addChatroomButton.setOnMouseClicked(event -> showAddChatroomPopup());
     }
 
