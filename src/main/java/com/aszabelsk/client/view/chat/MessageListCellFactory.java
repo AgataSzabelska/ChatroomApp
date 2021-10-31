@@ -36,13 +36,19 @@ public class MessageListCellFactory implements Callback<ListView<Message>, ListC
             final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm, dd-MM-yyyy");
 
             {
-                messageTextLabel.setWrapText(true);
                 HBox topLayout = new HBox(usernameLabel, dateLabel);
                 HBox.setHgrow(usernameLabel, Priority.ALWAYS);
                 usernameLabel.setMaxWidth(10E6);
+                usernameLabel.getStyleClass().add("bold-label");
+                messageTextLabel.setWrapText(true);
                 root.getChildren().add(topLayout);
                 root.getChildren().add(messageTextLabel);
                 root.getStyleClass().add(messageBoxStyleClass);
+                listViewProperty().addListener((observable, oldValue, newValue) -> {
+                    if (newValue != null) {
+                        root.prefWidthProperty().bind(getListView().widthProperty().subtract(60));
+                    }
+                });
             }
 
             @Override
