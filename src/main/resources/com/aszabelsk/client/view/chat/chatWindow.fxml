@@ -7,7 +7,6 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.SVGPath?>
@@ -18,7 +17,8 @@
             <children>
                 <HBox alignment="CENTER" styleClass="chatroom-header">
                     <children>
-                        <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Chatrooms"
+                        <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                               text="%chatWindowController.chatrooms"
                                HBox.hgrow="ALWAYS">
                         </Label>
                         <StackPane fx:id="addChatroomButton" styleClass="icon-button">

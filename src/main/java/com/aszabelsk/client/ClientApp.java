@@ -10,6 +10,8 @@ import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class ClientApp extends Application {
 
@@ -17,20 +19,23 @@ public class ClientApp extends Application {
 
     private Stage primaryStage;
 
+    private ResourceBundle resourceBundle;
+
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
+        resourceBundle = ResourceBundle.getBundle("com/aszabelsk/client/view/translation", new Locale(Locale.getDefault().getLanguage()));
         showLoginDialog();
     }
 
     private void showLoginDialog() {
-        LoginDialog loginDialog = new LoginDialog();
+        LoginDialog loginDialog = new LoginDialog(resourceBundle);
         loginDialog.getOkButton().addEventFilter(ActionEvent.ACTION, event -> {
             try {
                 client = new Client();
             } catch (IOException e) {
                 event.consume();
-                new ConnectionErrorAlert().showAndWait();
+                new ConnectionErrorAlert(resourceBundle).showAndWait();
             }
         });
         loginDialog.showAndWait().ifPresent(response -> {
@@ -44,7 +49,7 @@ public class ClientApp extends Application {
 
     private void startChat(String username) {
         client.logIn(username);
-        ChatWindowController chatWindowController = new ChatWindowController(primaryStage, client);
+        ChatWindowController chatWindowController = new ChatWindowController(primaryStage, client, resourceBundle);
         chatWindowController.start();
     }
 
