@@ -1,5 +1,6 @@
 package com.aszabelsk.client.view.chat;
 
+import com.aszabelsk.client.TextUtils;
 import com.aszabelsk.client.model.Client;
 import com.aszabelsk.commons.Message;
 import javafx.application.Platform;
@@ -10,7 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
@@ -38,7 +39,7 @@ public class ChatWindowController {
     private StackPane emojiButton;
 
     @FXML
-    private TextField messageTextField;
+    private TextArea messageTextArea;
 
     @FXML
     private ListView<Message> messageListView;
@@ -56,6 +57,7 @@ public class ChatWindowController {
         initStage();
         initMessageListView();
         addTooltips();
+        messageTextArea.requestFocus();
     }
 
     private void loadFxml() {
@@ -96,11 +98,17 @@ public class ChatWindowController {
     private void registerListeners() {
         sendButton.setOnMouseClicked(event -> sendMessage());
 
-        messageTextField.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                sendMessage();
-            }
-        });
+        messageTextArea
+                .setOnKeyPressed(event -> {
+                    if (event.getCode() == KeyCode.ENTER) {
+                        if (event.isAltDown()) {
+                            TextUtils.insertText(messageTextArea, "\n");
+                        } else {
+                            sendMessage();
+                        }
+                        event.consume();
+                    }
+                });
 
         client.lastMessageProperty().addListener((observable, oldValue, newValue) -> {
             Platform.runLater(() -> messages.add(newValue));
@@ -111,15 +119,15 @@ public class ChatWindowController {
     }
 
     private void sendMessage() {
-        String message = messageTextField.getText();
+        String message = messageTextArea.getText();
         if (!message.isEmpty()) {
             client.sendMessage(message);
-            messageTextField.clear();
+            messageTextArea.clear();
         }
     }
 
     private void showEmojiMenu() {
-        EmojiMenu emojiMenu = EmojiMenu.getInstance(messageTextField);
+        EmojiMenu emojiMenu = EmojiMenu.getInstance(messageTextArea);
         emojiMenu.show(emojiButton);
     }
 
